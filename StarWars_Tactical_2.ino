@@ -12,8 +12,12 @@ void setup()
     tft.setRotation(1); // Set screen rotation
 
     // Fill the screen with a color
-    tft.fillScreen(TFT_RED);
-    tft.println("test");
+    tft.fillScreen(0xffff);
+    tft.setTextColor(0x3eff);
+    tft.fillRect(10, 10, 20, 4, 0x3eff);
+    tft.setTextColor(0x3eff);
+    tft.fillRect(10, 80, 40, 4, 0x3eff);
+    tft.drawFastHLine(10, 85, 200, 0x3eff);
 }
 
 void loop()

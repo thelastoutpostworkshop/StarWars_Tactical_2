@@ -444,7 +444,7 @@ void serialDisplay::executeCommand(void)
     break;
   case CLEAR_SCREEN:
     display->fillScreen(COLOR_BLACK);
-    sprintf(serialBuffer, PSTR("%s.fillScreen(0x%x);"), displayName,currentColor);
+    sprintf(serialBuffer, PSTR("%s.fillScreen(0x%x);"), displayName, COLOR_BLACK);
     Serial.println(serialBuffer);
     break;
   case FILL_SCREEN:
