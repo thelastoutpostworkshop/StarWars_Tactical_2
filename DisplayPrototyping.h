@@ -60,6 +60,7 @@ private:
   int displayHeight;
   unsigned long lastSerialRead;
   char serialBuffer[255];
+  const char *displayName;
 
   void decodeInput(char input);
   void executeCommand(void);
@@ -72,15 +73,24 @@ private:
   boolean isCommand(const char *);
 
 public:
-  serialDisplay(DISP *d);
+  serialDisplay(DISP *d, const char *dName = nullptr);
   ~serialDisplay();
   void readCommandsFromSerial(void);
   void runCommands(char *);
   void runCommands(const __FlashStringHelper *ifsh);
 };
 
-serialDisplay::serialDisplay(DISP *d)
+serialDisplay::serialDisplay(DISP *d, const char *dName)
 {
+  if (displayName != nullptr)
+  {
+    displayName = dName;
+  }
+  else
+  {
+    displayName = "tft";
+  }
+
   currentMode = UNDEFINED;
   display = d;
 
