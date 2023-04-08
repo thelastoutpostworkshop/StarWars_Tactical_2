@@ -401,13 +401,19 @@ void serialDisplay::executeCommand(void)
   case DISPLAY_COLOR:
     currentColor = strtol(captureData.capture[0], NULL, 16);
     display->setTextColor(currentColor);
+    sprintf(serialBuffer, PSTR("setTextColor(%x)"), arg[0]);
+    Serial.println(serialBuffer);
     break;
   case TEXT_SIZE:
     arg = getIntFromCapture(&captureData, 1);
     display->setTextSize(arg[0]);
+    sprintf(serialBuffer, PSTR("setTextSize(%d)"), arg[0]);
+    Serial.println(serialBuffer);
     break;
   case TEXT:
     display->print(captureData.capture[0]);
+    sprintf(serialBuffer, PSTR("print(%s)"), captureData.capture[0]);
+    Serial.println(serialBuffer);
     break;
   case TEXT_CENTER_HORIZONTAL:
 #if defined(_ADAFRUIT_TFTLCD_H_)
