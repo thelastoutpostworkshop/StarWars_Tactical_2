@@ -400,7 +400,6 @@ void serialDisplay::executeCommand(void)
   {
   case DISPLAY_COLOR:
     currentColor = strtol(captureData.capture[0], NULL, 16);
-    ;
     display->setTextColor(currentColor);
     break;
   case TEXT_SIZE:
