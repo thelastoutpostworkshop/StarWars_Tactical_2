@@ -411,18 +411,18 @@ void serialDisplay::executeCommand(void)
   case DISPLAY_COLOR:
     currentColor = strtol(captureData.capture[0], NULL, 16);
     display->setTextColor(currentColor);
-    sprintf(serialBuffer, PSTR("%s.setTextColor(%x)"), displayName, currentColor);
+    sprintf(serialBuffer, PSTR("%s.setTextColor(%x);"), displayName, currentColor);
     Serial.println(serialBuffer);
     break;
   case TEXT_SIZE:
     arg = getIntFromCapture(&captureData, 1);
     display->setTextSize(arg[0]);
-    sprintf(serialBuffer, PSTR("%s.setTextSize(%d)"), displayName, arg[0]);
+    sprintf(serialBuffer, PSTR("%s.setTextSize(%d);"), displayName, arg[0]);
     Serial.println(serialBuffer);
     break;
   case TEXT:
     display->print(captureData.capture[0]);
-    sprintf(serialBuffer, PSTR("%s.print(%s)"), displayName, captureData.capture[0]);
+    sprintf(serialBuffer, PSTR("%s.print(%s);"), displayName, captureData.capture[0]);
     Serial.println(serialBuffer);
     break;
   case TEXT_CENTER_HORIZONTAL:
@@ -444,90 +444,90 @@ void serialDisplay::executeCommand(void)
     break;
   case CLEAR_SCREEN:
     display->fillScreen(COLOR_BLACK);
-    sprintf(serialBuffer, PSTR("%s.fillScreen(%x)"), displayName);
+    sprintf(serialBuffer, PSTR("%s.fillScreen(%x);"), displayName);
     Serial.println(serialBuffer);
     break;
   case FILL_SCREEN:
     display->fillScreen(currentColor);
-    sprintf(serialBuffer, PSTR("%s.fillScreen(%x)"), displayName, currentColor);
+    sprintf(serialBuffer, PSTR("%s.fillScreen(%x);"), displayName, currentColor);
     Serial.println(serialBuffer);
     break;
   case SET_CURSOR:
     arg = getIntFromCapture(&captureData, 2);
     display->setCursor(arg[0], arg[1]);
-    sprintf(serialBuffer, PSTR("%s.setCursor(%d,%d)"), displayName, arg[0], arg[1]);
+    sprintf(serialBuffer, PSTR("%s.setCursor(%d,%d);"), displayName, arg[0], arg[1]);
     Serial.println(serialBuffer);
     break;
   case CIRCLE_HOLLOW:
     arg = getIntFromCapture(&captureData, 3);
     display->drawCircle(arg[0], arg[1], arg[2], currentColor);
-    sprintf(serialBuffer, PSTR("%s.drawCircle(%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], currentColor);
+    sprintf(serialBuffer, PSTR("%s.drawCircle(%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], currentColor);
     Serial.println(serialBuffer);
     break;
   case CIRCLE_FILL:
     arg = getIntFromCapture(&captureData, 3);
     display->fillCircle(arg[0], arg[1], arg[2], currentColor);
-    sprintf(serialBuffer, PSTR("%s.fillCircle(%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], currentColor);
+    sprintf(serialBuffer, PSTR("%s.fillCircle(%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], currentColor);
     Serial.println(serialBuffer);
     break;
   case TRIANGLE_HOLLOW:
     arg = getIntFromCapture(&captureData, 6);
     display->drawTriangle(arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
-    sprintf(serialBuffer, PSTR("%s.drawTriangle(%d,%d,%d,%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
+    sprintf(serialBuffer, PSTR("%s.drawTriangle(%d,%d,%d,%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
     Serial.println(serialBuffer);
     break;
   case TRIANGLE_FILL:
     arg = getIntFromCapture(&captureData, 6);
     display->fillTriangle(arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
-    sprintf(serialBuffer, PSTR("%s.fillTriangle(%d,%d,%d,%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
+    sprintf(serialBuffer, PSTR("%s.fillTriangle(%d,%d,%d,%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
     Serial.println(serialBuffer);
     break;
   case RECTANGLE_HOLLOW:
     arg = getIntFromCapture(&captureData, 4);
     display->drawRect(arg[0], arg[1], arg[2], arg[3], currentColor);
-    sprintf(serialBuffer, PSTR("%s.drawRect(%d,%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], arg[3], currentColor);
+    sprintf(serialBuffer, PSTR("%s.drawRect(%d,%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], arg[3], currentColor);
     Serial.println(serialBuffer);
     break;
   case RECTANGLE_FILL:
     arg = getIntFromCapture(&captureData, 4);
     display->fillRect(arg[0], arg[1], arg[2], arg[3], currentColor);
-    sprintf(serialBuffer, PSTR("%s.fillRect(%d,%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], arg[3], currentColor);
+    sprintf(serialBuffer, PSTR("%s.fillRect(%d,%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], arg[3], currentColor);
     Serial.println(serialBuffer);
     break;
   case RECTANGLE_ROUND_HOLLOW:
     arg = getIntFromCapture(&captureData, 5);
     display->drawRoundRect(arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
-    sprintf(serialBuffer, PSTR("%s.drawRoundRect(%d,%d,%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
+    sprintf(serialBuffer, PSTR("%s.drawRoundRect(%d,%d,%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
     Serial.println(serialBuffer);
     break;
   case RECTANGLE_ROUND_FILL:
     arg = getIntFromCapture(&captureData, 5);
     display->fillRoundRect(arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
-    sprintf(serialBuffer, PSTR("%s.fillRoundRect(%d,%d,%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
+    sprintf(serialBuffer, PSTR("%s.fillRoundRect(%d,%d,%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
     Serial.println(serialBuffer);
     break;
   case LINE_FAST_VERTICAL:
     arg = getIntFromCapture(&captureData, 3);
     display->drawFastVLine(arg[0], arg[1], arg[2], currentColor);
-    sprintf(serialBuffer, PSTR("%s.drawFastVLine(%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], currentColor);
+    sprintf(serialBuffer, PSTR("%s.drawFastVLine(%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], currentColor);
     Serial.println(serialBuffer);
     break;
   case LINE_FAST_HORIZONTAL:
     arg = getIntFromCapture(&captureData, 3);
     display->drawFastHLine(arg[0], arg[1], arg[2], currentColor);
-    sprintf(serialBuffer, PSTR("%s.drawFastHLine(%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], currentColor);
+    sprintf(serialBuffer, PSTR("%s.drawFastHLine(%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], currentColor);
     Serial.println(serialBuffer);
     break;
   case LINE:
     arg = getIntFromCapture(&captureData, 4);
     display->drawLine(arg[0], arg[1], arg[2], arg[3], currentColor);
-    sprintf(serialBuffer, PSTR("%s.drawLine(%d,%d,%d,%d,%x)"), displayName, arg[0], arg[1], arg[2], arg[3], currentColor);
+    sprintf(serialBuffer, PSTR("%s.drawLine(%d,%d,%d,%d,%x);"), displayName, arg[0], arg[1], arg[2], arg[3], currentColor);
     Serial.println(serialBuffer);
     break;
   case ROTATE:
     arg = getIntFromCapture(&captureData, 1);
     display->setRotation(arg[0]);
-    sprintf(serialBuffer, PSTR("%s.setRotation(%d)"), displayName, arg[0]);
+    sprintf(serialBuffer, PSTR("%s.setRotation(%d);"), displayName, arg[0]);
     Serial.println(serialBuffer);
     break;
   default:
