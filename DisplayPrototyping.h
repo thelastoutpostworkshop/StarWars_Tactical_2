@@ -411,7 +411,7 @@ void serialDisplay::executeCommand(void)
   case DISPLAY_COLOR:
     currentColor = strtol(captureData.capture[0], NULL, 16);
     display->setTextColor(currentColor);
-    sprintf(serialBuffer, PSTR("%s.setTextColor(%x);"), displayName, currentColor);
+    sprintf(serialBuffer, PSTR("%s.setTextColor(0x%x);"), displayName, currentColor);
     Serial.println(serialBuffer);
     break;
   case TEXT_SIZE:
