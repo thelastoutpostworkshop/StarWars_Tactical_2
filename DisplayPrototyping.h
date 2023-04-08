@@ -83,12 +83,10 @@ serialDisplay::serialDisplay(DISP *d)
 {
   currentMode = UNDEFINED;
   display = d;
-#if defined(_ADAFRUIT_TFTLCD_H_)
 
   displayWidth = d->width();
   displayHeight = d->height();
 
-#endif //
 
   lastSerialRead = millis();
 }
