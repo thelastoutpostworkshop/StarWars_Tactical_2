@@ -2,7 +2,7 @@
 #include "DisplayPrototyping.h"
 
 TFT_eSPI tft = TFT_eSPI(); // Invoke custom library
-serialDisplay sDisplay(&tft);
+serialDisplay sDisplay(&tft,"display");
 
 void setup()
 {

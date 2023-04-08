@@ -82,7 +82,7 @@ public:
 
 serialDisplay::serialDisplay(DISP *d, const char *dName)
 {
-  if (displayName != nullptr)
+  if (dName != nullptr)
   {
     displayName = dName;
   }
