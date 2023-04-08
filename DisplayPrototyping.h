@@ -87,7 +87,6 @@ serialDisplay::serialDisplay(DISP *d)
   displayWidth = d->width();
   displayHeight = d->height();
 
-
   lastSerialRead = millis();
 }
 
@@ -105,9 +104,11 @@ void serialDisplay::runCommands(char *commands)
 void serialDisplay::runCommands(const __FlashStringHelper *ifsh)
 {
   PGM_P p = reinterpret_cast<PGM_P>(ifsh);
-  while (1) {
+  while (1)
+  {
     unsigned char c = pgm_read_byte(p++);
-    if (c == 0) break;
+    if (c == 0)
+      break;
     decodeInput(c);
   }
 }
@@ -168,84 +169,87 @@ void serialDisplay::captureCommand(char input)
 {
   captureInput(&captureData, input);
   closeCapture(&captureData);
-  
-  const char* commands[] = {"tt", "tv", "th", "ts", "ch", "cf", "gh", "gf", "rh", "rf", "ri", "rj", "sc", "lv", "lh", "dl","ro"};
-  const int numCommands = sizeof(commands)/sizeof(*commands);
 
-  for (int i = 0; i < numCommands; i++) {
-    if (isCommand(commands[i])) {
-      switch(i) {
-        case 0:
-          currentMode = TEXT;
-          openCapture(&captureData, 1);
-          break;
-        case 1:
-          currentMode = TEXT_CENTER_VERTICAL;
-          openCapture(&captureData, 1);
-          break;
-        case 2:
-          currentMode = TEXT_CENTER_HORIZONTAL;
-          openCapture(&captureData, 1);
-          break;
-        case 3:
-          currentMode = TEXT_SIZE;
-          openCapture(&captureData, 1);
-          break;
-        case 4:
-          currentMode = CIRCLE_HOLLOW;
-          openCapture(&captureData, 3);
-          break;
-        case 5:
-          currentMode = CIRCLE_FILL;
-          openCapture(&captureData, 3);
-          break;
-        case 6:
-          currentMode = TRIANGLE_HOLLOW;
-          openCapture(&captureData, 6);
-          break;
-        case 7:
-          currentMode = TRIANGLE_FILL;
-          openCapture(&captureData, 6);
-          break;
-        case 8:
-          currentMode = RECTANGLE_HOLLOW;
-          openCapture(&captureData, 4);
-          break;
-        case 9:
-          currentMode = RECTANGLE_FILL;
-          openCapture(&captureData, 4);
-          break;
-        case 10:
-          currentMode = RECTANGLE_ROUND_HOLLOW;
-          openCapture(&captureData, 5);
-          break;
-        case 11:
-          currentMode = RECTANGLE_ROUND_FILL;
-          openCapture(&captureData, 5);
-          break;
-        case 12:
-          currentMode = SET_CURSOR;
-          openCapture(&captureData, 2);
-          break;
-        case 13:
-          currentMode = LINE_FAST_VERTICAL;
-          openCapture(&captureData, 3);
-          break;
-        case 14:
-          currentMode = LINE_FAST_HORIZONTAL;
-          openCapture(&captureData, 3);
-          break;
-        case 15:
-          currentMode = LINE;
-          openCapture(&captureData, 4);
-          break;
-        case 16:
-          currentMode = ROTATE;
-          openCapture(&captureData, 1);
-          break;
-        default:
-          Serial.println(F("Unknown Command"));
-          break;
+  const char *commands[] = {"tt", "tv", "th", "ts", "ch", "cf", "gh", "gf", "rh", "rf", "ri", "rj", "sc", "lv", "lh", "dl", "ro"};
+  const int numCommands = sizeof(commands) / sizeof(*commands);
+
+  for (int i = 0; i < numCommands; i++)
+  {
+    if (isCommand(commands[i]))
+    {
+      switch (i)
+      {
+      case 0:
+        currentMode = TEXT;
+        openCapture(&captureData, 1);
+        break;
+      case 1:
+        currentMode = TEXT_CENTER_VERTICAL;
+        openCapture(&captureData, 1);
+        break;
+      case 2:
+        currentMode = TEXT_CENTER_HORIZONTAL;
+        openCapture(&captureData, 1);
+        break;
+      case 3:
+        currentMode = TEXT_SIZE;
+        openCapture(&captureData, 1);
+        break;
+      case 4:
+        currentMode = CIRCLE_HOLLOW;
+        openCapture(&captureData, 3);
+        break;
+      case 5:
+        currentMode = CIRCLE_FILL;
+        openCapture(&captureData, 3);
+        break;
+      case 6:
+        currentMode = TRIANGLE_HOLLOW;
+        openCapture(&captureData, 6);
+        break;
+      case 7:
+        currentMode = TRIANGLE_FILL;
+        openCapture(&captureData, 6);
+        break;
+      case 8:
+        currentMode = RECTANGLE_HOLLOW;
+        openCapture(&captureData, 4);
+        break;
+      case 9:
+        currentMode = RECTANGLE_FILL;
+        openCapture(&captureData, 4);
+        break;
+      case 10:
+        currentMode = RECTANGLE_ROUND_HOLLOW;
+        openCapture(&captureData, 5);
+        break;
+      case 11:
+        currentMode = RECTANGLE_ROUND_FILL;
+        openCapture(&captureData, 5);
+        break;
+      case 12:
+        currentMode = SET_CURSOR;
+        openCapture(&captureData, 2);
+        break;
+      case 13:
+        currentMode = LINE_FAST_VERTICAL;
+        openCapture(&captureData, 3);
+        break;
+      case 14:
+        currentMode = LINE_FAST_HORIZONTAL;
+        openCapture(&captureData, 3);
+        break;
+      case 15:
+        currentMode = LINE;
+        openCapture(&captureData, 4);
+        break;
+      case 16:
+        currentMode = ROTATE;
+        openCapture(&captureData, 1);
+        break;
+      default:
+        Serial.println(F("Unknown Command"));
+        break;
       }
       return;
     }
@@ -425,33 +429,48 @@ void serialDisplay::executeCommand(void)
     break;
   case CLEAR_SCREEN:
     display->fillScreen(COLOR_BLACK);
+    Serial.println("fillScreen(COLOR_BLACK)");
     break;
   case FILL_SCREEN:
     display->fillScreen(currentColor);
+    sprintf(serialBuffer, PSTR("fillScreen(%x)"), currentColor);
+    Serial.println(serialBuffer);
     break;
   case SET_CURSOR:
     arg = getIntFromCapture(&captureData, 2);
     display->setCursor(arg[0], arg[1]);
+    sprintf(serialBuffer, PSTR("setCursor(%d,%d)"), arg[0], arg[1]);
+    Serial.println(serialBuffer);
     break;
   case CIRCLE_HOLLOW:
     arg = getIntFromCapture(&captureData, 3);
     display->drawCircle(arg[0], arg[1], arg[2], currentColor);
+    sprintf(serialBuffer, PSTR("drawCircle(%d,%d,%d,%x)"), arg[0], arg[1], arg[2], currentColor);
+    Serial.println(serialBuffer);
     break;
   case CIRCLE_FILL:
     arg = getIntFromCapture(&captureData, 3);
     display->fillCircle(arg[0], arg[1], arg[2], currentColor);
+    sprintf(serialBuffer, PSTR("fillCircle(%d,%d,%d,%x)"), arg[0], arg[1], arg[2], currentColor);
+    Serial.println(serialBuffer);
     break;
   case TRIANGLE_HOLLOW:
     arg = getIntFromCapture(&captureData, 6);
     display->drawTriangle(arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
+    sprintf(serialBuffer, PSTR("drawTriangle(%d,%d,%d,%d,%d,%d,%x)"), arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
+    Serial.println(serialBuffer);
     break;
   case TRIANGLE_FILL:
     arg = getIntFromCapture(&captureData, 6);
     display->fillTriangle(arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
+    sprintf(serialBuffer, PSTR("fillTriangle(%d,%d,%d,%d,%d,%d,%x)"), arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], currentColor);
+    Serial.println(serialBuffer);
     break;
   case RECTANGLE_HOLLOW:
     arg = getIntFromCapture(&captureData, 4);
     display->drawRect(arg[0], arg[1], arg[2], arg[3], currentColor);
+    sprintf(serialBuffer, PSTR("drawRect(%d,%d,%d,%d,%x)"), arg[0], arg[1], arg[2], arg[3], currentColor);
+    Serial.println(serialBuffer);
     break;
   case RECTANGLE_FILL:
     arg = getIntFromCapture(&captureData, 4);
@@ -462,26 +481,38 @@ void serialDisplay::executeCommand(void)
   case RECTANGLE_ROUND_HOLLOW:
     arg = getIntFromCapture(&captureData, 5);
     display->drawRoundRect(arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
+    sprintf(serialBuffer, PSTR("drawRoundRect(%d,%d,%d,%d,%d,%x)"), arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
+    Serial.println(serialBuffer);
     break;
   case RECTANGLE_ROUND_FILL:
     arg = getIntFromCapture(&captureData, 5);
     display->fillRoundRect(arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
+    sprintf(serialBuffer, PSTR("fillRoundRect(%d,%d,%d,%d,%d,%x)"), arg[0], arg[1], arg[2], arg[3], arg[4], currentColor);
+    Serial.println(serialBuffer);
     break;
   case LINE_FAST_VERTICAL:
     arg = getIntFromCapture(&captureData, 3);
     display->drawFastVLine(arg[0], arg[1], arg[2], currentColor);
+    sprintf(serialBuffer, PSTR("drawFastVLine(%d,%d,%d,%x)"), arg[0], arg[1], arg[2], currentColor);
+    Serial.println(serialBuffer);
     break;
   case LINE_FAST_HORIZONTAL:
     arg = getIntFromCapture(&captureData, 3);
     display->drawFastHLine(arg[0], arg[1], arg[2], currentColor);
+    sprintf(serialBuffer, PSTR("drawFastHLine(%d,%d,%d,%x)"), arg[0], arg[1], arg[2], currentColor);
+    Serial.println(serialBuffer);
     break;
   case LINE:
     arg = getIntFromCapture(&captureData, 4);
-    display->drawLine(arg[0], arg[1], arg[2],arg[3], currentColor);
+    display->drawLine(arg[0], arg[1], arg[2], arg[3], currentColor);
+    sprintf(serialBuffer, PSTR("drawLine(%d,%d,%d,%d,%x)"), arg[0], arg[1], arg[2], arg[3], currentColor);
+    Serial.println(serialBuffer);
     break;
   case ROTATE:
     arg = getIntFromCapture(&captureData, 1);
     display->setRotation(arg[0]);
+    sprintf(serialBuffer, PSTR("setRotation(%d)"), arg[0]);
+    Serial.println(serialBuffer);
     break;
   default:
     Serial.println(F("Unknown Command"));
