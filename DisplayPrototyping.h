@@ -1,4 +1,3 @@
-
 #if defined(_ADAFRUIT_TFTLCD_H_)
 
 #define DISP Adafruit_TFTLCD
@@ -60,6 +59,7 @@ private:
   int displayWidth;
   int displayHeight;
   unsigned long lastSerialRead;
+  char serialBuffer[255];
 
   void decodeInput(char input);
   void executeCommand(void);
@@ -456,6 +456,8 @@ void serialDisplay::executeCommand(void)
   case RECTANGLE_FILL:
     arg = getIntFromCapture(&captureData, 4);
     display->fillRect(arg[0], arg[1], arg[2], arg[3], currentColor);
+    sprintf(serialBuffer, PSTR("fillRect(%d,%d,%d,%d,%x)"), arg[0], arg[1], arg[2], arg[3], currentColor);
+    Serial.println(serialBuffer);
     break;
   case RECTANGLE_ROUND_HOLLOW:
     arg = getIntFromCapture(&captureData, 5);
