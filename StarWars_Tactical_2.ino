@@ -18,5 +18,5 @@ void setup()
 
 void loop()
 {
-    // You can add your code here to update the display
+    sDisplay.readCommandsFromSerial();
 }
