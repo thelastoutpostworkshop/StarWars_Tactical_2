@@ -26,13 +26,25 @@ void setup()
 void drawMainGrid()
 {
     int start = 15;
+    int toggle = 1;
+    int mini;
     tft.drawFastHLine(0, 85, tft.width(), COLOR_TACTICAL_DARK_BLUE);
     for (int i = 0; i < 3; i++)
     {
         tft.drawFastVLine(start, 0, 90, COLOR_TACTICAL_DARK_BLUE);
-        tft.drawFastHLine(start, 90, 5, COLOR_TACTICAL_DARK_BLUE);
+        if (toggle == -1)
+        {
+            mini = start - 5;
+        }
+        else
+        {
+            mini = start;
+        }
+        tft.drawFastHLine(mini, 90, 5, COLOR_TACTICAL_DARK_BLUE);
+        tft.drawFastHLine(mini, 0, 5, COLOR_TACTICAL_DARK_BLUE);
 
         start += 40;
+        toggle *= -1;
     }
     tft.drawFastHLine(0, 5, tft.width(), COLOR_TACTICAL_DARK_BLUE);
 
