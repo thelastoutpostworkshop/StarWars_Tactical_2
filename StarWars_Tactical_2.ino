@@ -33,7 +33,7 @@ void drawLargeObjects(void)
         if (random(4) == 0)
         {
             color = ((random(2)) == 0) ? COLOR_TACTICAL_DARK_BLUE : COLOR_TACTICAL_DARK_LIGHTBLUE;
-            object_size = ((random(2)) == 0) ? 15 : 30;
+            object_size = ((random(2)) == 0) ? 10 : 17;
             tft.fillRect(current_x, current_y, object_size, 4, color);
         }
         current_x += (object_size + 5 + random(10));
