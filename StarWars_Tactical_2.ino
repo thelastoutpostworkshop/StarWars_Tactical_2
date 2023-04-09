@@ -5,7 +5,7 @@ TFT_eSPI tft = TFT_eSPI(); // Invoke custom library
 serialDisplay sDisplay(&tft);
 
 #define COLOR_TACTICAL_DARK_BLUE 0xff
-#define COLOR_TACTICAL_DARK_LIGHTBLUE 0x3eff
+#define COLOR_TACTICAL_DARK_LIGHTBLUE 0x34dd
 
 #define BOTTOM_ZONE 90
 
@@ -27,20 +27,32 @@ void drawLargeObjects(void)
     int current_x = 5;
     int current_y = 10;
     uint32_t color;
-    int object_size;
+    int object_width, object_height;
+    int max_height = 0;
     while (current_y < BOTTOM_ZONE - 10)
     {
-        if (random(4) == 0)
+        if (random(3) == 0)
         {
             color = ((random(2)) == 0) ? COLOR_TACTICAL_DARK_BLUE : COLOR_TACTICAL_DARK_LIGHTBLUE;
-            object_size = ((random(2)) == 0) ? 10 : 17;
-            tft.fillRect(current_x, current_y, object_size, 4, color);
+            object_width = ((random(2)) == 0) ? 10 : 17;
+            if (random(4) == 0)
+            {
+                object_height = ((random(2)) == 0) ? 4 : 8;
+            } else {
+                object_height = 4;
+            }
+            if (object_height > max_height)
+            {
+                max_height = object_height;
+            }
+            tft.fillRect(current_x, current_y, object_width, object_height, color);
         }
-        current_x += (object_size + 5 + random(10));
+        current_x += (object_width + 5 + random(10));
         if (current_x >= tft.width())
         {
             current_x = 5;
-            current_y += (5 + random(7));
+            current_y += (max_height + random(7));
+            max_height = 0;
         }
     }
 }
