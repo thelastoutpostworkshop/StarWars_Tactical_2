@@ -7,13 +7,15 @@ serialDisplay sDisplay(&tft);
 #define COLOR_TACTICAL_DARK_BLUE 0xff
 #define COLOR_TACTICAL_DARK_LIGHTBLUE 0x34dd
 
-
 #define BOTTOM_ZONE 90
 
-struct PixelData {
-  int32_t x, y;
-  uint32_t color;
+struct PixelData
+{
+    int32_t x, y;
+    uint16_t color;
 };
+
+PixelData pixels[5000]; // Array to store the pixel data
 
 void setup()
 {
@@ -26,64 +28,72 @@ void setup()
     tft.fillScreen(0x0);
     drawMainGrid();
     drawLargeObjects();
-    moveScanLine(8,100,101,0,90,TFT_WHITE,10);
+    drawScanLine(8, 75, 0, 90, TFT_WHITE);
+    tft.fillScreen(TFT_WHITE);
+    Serial.println(tft.readPixel(20, 5));
+    // moveScanLine(8, 75, 100, 0, 90, TFT_WHITE, 10);
 }
 
-void moveScanLine(uint32_t sideLength, uint32_t startX, uint32_t endX, uint32_t yPos1, uint32_t yPos2, uint32_t color, int delayTime) {
-  const int numPixels = 2 * sideLength * sideLength + (endX - startX); // Maximum number of pixels to store
-  PixelData pixels[numPixels]; // Array to store the pixel data
-  Serial.println(numPixels);
-  int numStoredPixels;
-  uint32_t xPos = startX;
+void moveScanLine(uint32_t sideLength, uint32_t startX, uint32_t endX, uint32_t yPos1, uint32_t yPos2, uint16_t color, int delayTime)
+{
+    int numStoredPixels;
+    uint32_t xPos = startX;
 
-  while (xPos != endX) {
-    // Save the pixel data before drawing the scan line
-    numStoredPixels = 0;
-    for (uint32_t x = xPos - sideLength; x <= xPos + sideLength; x++) {
-      for (uint32_t y = yPos1; y <= yPos2; y++) {
-        pixels[numStoredPixels].x = x;
-        pixels[numStoredPixels].y = y;
-        pixels[numStoredPixels].color = tft.readPixel(x, y);
-        numStoredPixels++;
-      }
+    while (xPos != endX)
+    {
+        // Save the pixel data before drawing the scan line
+        numStoredPixels = 0;
+        for (uint32_t x = xPos - sideLength; x <= xPos + sideLength; x++)
+        {
+            for (uint32_t y = yPos1; y <= yPos2; y++)
+            {
+                pixels[numStoredPixels].x = x;
+                pixels[numStoredPixels].y = y;
+                pixels[numStoredPixels].color = tft.readPixel(x, y);
+                numStoredPixels++;
+            }
+        }
+
+        // Draw the scan line at the current position
+        drawScanLine(sideLength, xPos, yPos1, yPos2, color);
+        delay(delayTime); // Delay for smooth movement
+
+        // Restore the pixel data at the current position
+        for (int i = 0; i < numStoredPixels; i++)
+        {
+            tft.drawPixel(pixels[i].x, pixels[i].y, pixels[i].color);
+        }
+
+        // Update the x position
+        if (startX < endX)
+        {
+            xPos++;
+        }
+        else
+        {
+            xPos--;
+        }
     }
 
-    // Draw the scan line at the current position
+    // Draw the scan line at the final position
     drawScanLine(sideLength, xPos, yPos1, yPos2, color);
-    delay(delayTime); // Delay for smooth movement
-
-    // Restore the pixel data at the current position
-    for (int i = 0; i < numStoredPixels; i++) {
-      tft.drawPixel(pixels[i].x, pixels[i].y, pixels[i].color);
-    }
-
-    // Update the x position
-    if (startX < endX) {
-      xPos++;
-    } else {
-      xPos--;
-    }
-  }
-
-  // Draw the scan line at the final position
-  drawScanLine(sideLength, xPos, yPos1, yPos2, color);
 }
 
-void drawScanLine( uint32_t sideLength, uint32_t xPos, uint32_t yPos1, uint32_t yPos2, uint32_t color) {
-  // Calculate half the base and height of the triangles
-  uint32_t halfBase = sideLength / 2;
-  uint32_t height = sqrt(sideLength * sideLength - halfBase * halfBase);
+void drawScanLine(uint32_t sideLength, uint32_t xPos, uint32_t yPos1, uint32_t yPos2, uint16_t color)
+{
+    // Calculate half the base and height of the triangles
+    uint32_t halfBase = sideLength / 2;
+    uint32_t height = sqrt(sideLength * sideLength - halfBase * halfBase);
 
-  // First triangle pointing up
-  tft.fillTriangle(xPos, yPos1 + height, xPos + halfBase, yPos1, xPos - halfBase, yPos1, color);
+    // First triangle pointing up
+    tft.fillTriangle(xPos, yPos1 + height, xPos + halfBase, yPos1, xPos - halfBase, yPos1, color);
 
-  // Second triangle pointing down
-  tft.fillTriangle(xPos, yPos2 - height, xPos + halfBase, yPos2, xPos - halfBase, yPos2, color);
+    // Second triangle pointing down
+    tft.fillTriangle(xPos, yPos2 - height, xPos + halfBase, yPos2, xPos - halfBase, yPos2, color);
 
-  // Draw a line joining the tips of both triangles
-  tft.drawLine(xPos, yPos1 + height, xPos, yPos2 - height, color);
+    // Draw a line joining the tips of both triangles
+    tft.drawLine(xPos, yPos1 + height, xPos, yPos2 - height, color);
 }
-
 
 void drawLargeObjects(void)
 {
@@ -101,7 +111,9 @@ void drawLargeObjects(void)
             if (random(4) == 0)
             {
                 object_height = ((random(2)) == 0) ? 4 : 8;
-            } else {
+            }
+            else
+            {
                 object_height = 4;
             }
             if (object_height > max_height)
