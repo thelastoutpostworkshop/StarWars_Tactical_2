@@ -28,7 +28,7 @@ void drawLargeObjects(void)
     int current_y = 10;
     uint32_t color;
     int object_size;
-    while (current_y < BOTTOM_ZONE - 5)
+    while (current_y < BOTTOM_ZONE - 10)
     {
         if (random(4) == 0)
         {
@@ -40,7 +40,7 @@ void drawLargeObjects(void)
         if (current_x >= tft.width())
         {
             current_x = 5;
-            current_y += (10 + random(10));
+            current_y += (5 + random(7));
         }
     }
 }
