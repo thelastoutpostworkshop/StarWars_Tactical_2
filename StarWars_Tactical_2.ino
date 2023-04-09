@@ -25,14 +25,21 @@ void setup()
 
 void drawMainGrid()
 {
-    tft.drawFastHLine(0, 85, 128, COLOR_TACTICAL_DARK_BLUE);
-    tft.drawFastVLine(15, 0, 90, COLOR_TACTICAL_DARK_BLUE);
-    tft.drawFastVLine(55, 0, 90, COLOR_TACTICAL_DARK_BLUE);
-    tft.drawFastVLine(95, 0, 90, COLOR_TACTICAL_DARK_BLUE);
-    tft.drawFastHLine(0, 5, 128, COLOR_TACTICAL_DARK_BLUE);
-    tft.drawFastHLine(15, 90, 5, COLOR_TACTICAL_DARK_BLUE);
-    tft.drawFastHLine(55, 90, 5, COLOR_TACTICAL_DARK_BLUE);
-    tft.drawFastHLine(95, 90, 5, COLOR_TACTICAL_DARK_BLUE);
+    int start = 15;
+    tft.drawFastHLine(0, 85, tft.width(), COLOR_TACTICAL_DARK_BLUE);
+    for (int i = 0; i < 3; i++)
+    {
+        tft.drawFastVLine(start, 0, 90, COLOR_TACTICAL_DARK_BLUE);
+        tft.drawFastHLine(start, 90, 5, COLOR_TACTICAL_DARK_BLUE);
+
+        start += 40;
+    }
+    tft.drawFastHLine(0, 5, tft.width(), COLOR_TACTICAL_DARK_BLUE);
+
+    // tft.drawFastVLine(55, 0, 90, COLOR_TACTICAL_DARK_BLUE);
+    // tft.drawFastVLine(95, 0, 90, COLOR_TACTICAL_DARK_BLUE);
+    // tft.drawFastHLine(55, 90, 5, COLOR_TACTICAL_DARK_BLUE);
+    // tft.drawFastHLine(95, 90, 5, COLOR_TACTICAL_DARK_BLUE);
 }
 
 void loop()
