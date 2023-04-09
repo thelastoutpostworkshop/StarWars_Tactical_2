@@ -327,7 +327,7 @@ void serialDisplay::decodeInput(char input)
     }
     else
     {
-      if (input >= '0' && input <= '9')
+      if (isdigit(input))
       {
         captureInput(&captureData, input);
       }
@@ -351,20 +351,20 @@ void serialDisplay::decodeInput(char input)
     }
     else
     {
-      if (input >= '0' && input <= '9')
+      if (isdigit(input) or input == 'W' or input == 'w' or input == 'h' or input == 'H')
       {
         captureInput(&captureData, input);
       }
     }
     break;
   case DISPLAY_COLOR:
-    if ((input >= '0' && input <= '9') || (input >= 'a' && input <= 'f') || (input >= 'A' && input <= 'F'))
+    if (isdigit(input) || (input >= 'a' && input <= 'f') || (input >= 'A' && input <= 'F'))
     {
       captureInput(&captureData, input);
     }
     break;
   case TEXT_SIZE:
-    if ((input >= '0' && input <= '9'))
+    if (isdigit(input))
     {
       captureInput(&captureData, input);
     }
