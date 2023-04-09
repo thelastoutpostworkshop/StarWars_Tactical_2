@@ -8,8 +8,6 @@ serialDisplay sDisplay(&tft);
 #define COLOR_TACTICAL_DARK_LIGHTBLUE 0x3eff
 
 #define BOTTOM_ZONE 90
-#define LARGE_OBJECT_X_SPACING 50
-#define LARGE_OBJECT_Y_SPACING 30
 
 void setup()
 {
@@ -30,16 +28,16 @@ void drawLargeObjects(void)
     int current_y = 10;
     uint32_t color;
     int object_size;
-    while (current_x < tft.width())
+    while (current_y < BOTTOM_ZONE)
     {
         color = ((random(2)) == 0) ? COLOR_TACTICAL_DARK_BLUE : COLOR_TACTICAL_DARK_LIGHTBLUE;
-        object_size = ((random(2)) == 0) ? 20 : 40;
+        object_size = ((random(2)) == 0) ? 15 : 30;
         tft.fillRect(current_x, current_y, object_size, 4, color);
-        current_y += LARGE_OBJECT_Y_SPACING;
-        if (current_y >= BOTTOM_ZONE)
+        current_x += (object_size + 5 + random(10));
+        if (current_x >= tft.width())
         {
-            current_y = 10;
-            current_x += LARGE_OBJECT_X_SPACING;
+            current_x = 10;
+            current_y += ( 5 + random(10));
         }
     }
 }
