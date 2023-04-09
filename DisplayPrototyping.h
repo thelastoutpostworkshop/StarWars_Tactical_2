@@ -62,6 +62,8 @@ private:
   char serialBuffer[255];
   const char *displayName;
 
+  const char *displaySizeKeywords = "WwHh";
+
   void decodeInput(char input);
   void executeCommand(void);
   void captureInput(Capture *, char);
@@ -72,6 +74,7 @@ private:
   void captureCommand(char);
   boolean isCommand(const char *);
   void serialPrintFormatted(const char *formatStr, ...);
+  bool containsOnlyDigits(const char *);
 
 public:
   serialDisplay(DISP *d, const char *dName = nullptr);
@@ -124,12 +127,52 @@ void serialDisplay::runCommands(const __FlashStringHelper *ifsh)
   }
 }
 
+bool serialDisplay::containsOnlyDigits(const char *str)
+{
+  for (int i = 0; str[i] != '\0'; i++)
+  {
+    if (!isdigit(str[i]))
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 int *serialDisplay::getIntFromCapture(Capture *capture, int count)
 {
   static int res[MAX_ARG_CAPTURE];
   for (int i = 0; i < count && i < MAX_ARG_CAPTURE; i++)
   {
-    res[i] = atoi(capture->capture[i]);
+    if (containsOnlyDigits(capture->capture[i]))
+    {
+      res[i] = atoi(capture->capture[i]);
+    }
+    else
+    {
+      if (strchr(displaySizeKeywords, capture->capture[i][0]))
+      {
+        switch (capture->capture[i][0])
+        {
+        case 'W':
+        case 'w':
+          /* code */
+          res[i] = displayWidth;
+          break;
+        case 'H':
+        case 'h':
+          res[i] = displayHeight;
+          break;
+        default:
+          res[i] = 0;
+          break;
+        }
+      }
+      else
+      {
+        res[i] = 0;
+      }
+    }
   }
   return res;
 }
@@ -351,7 +394,7 @@ void serialDisplay::decodeInput(char input)
     }
     else
     {
-      if (isdigit(input) or input == 'W' or input == 'w' or input == 'h' or input == 'H')
+      if (isdigit(input) || strchr(displaySizeKeywords, input))
       {
         captureInput(&captureData, input);
       }
