@@ -15,9 +15,16 @@ void setup()
     tft.fillScreen(0x0);
     tft.setTextColor(0x3eff);
     tft.fillRect(10, 10, 20, 4, 0x3eff);
-    tft.setTextColor(0x3eff);
-    tft.fillRect(10, 80, 40, 4, 0x3eff);
-    tft.drawFastHLine(10, 85, 200, 0x3eff);
+    tft.setTextColor(0xff);
+    tft.fillRect(10, 70, 40, 4, 0xff);
+    tft.drawFastHLine(0, 85, 128, 0xff);
+    tft.drawFastVLine(15, 0, 90, 0xff);
+    tft.drawFastVLine(55, 0, 90, 0xff);
+    tft.drawFastVLine(95, 0, 90, 0xff);
+    tft.drawFastHLine(0, 5, 128, 0xff);
+    tft.drawFastHLine(15, 90, 5, 0xff);
+    tft.drawFastHLine(55, 90, 5, 0xff);
+    tft.drawFastHLine(95, 90, 5, 0xff);
 }
 
 void loop()
