@@ -442,7 +442,7 @@ void serialDisplay::executeCommand(void)
 #endif // _ADAFRUIT_TFTLCD_H_
 #if defined(_TFT_eSPIH_)
     w = display->textWidth(captureData.capture[0]);
-    x = (display->width() - w) / 2;
+    x = (displayWidth - w) / 2;
     y = display->getCursorY();
     display->setCursor(x, y);
 #endif // _TFT_eSPIH_
@@ -454,6 +454,12 @@ void serialDisplay::executeCommand(void)
     display->getTextBounds(captureData.capture[0], &x, &y, &x1, &y1, &w, &h);
     display->setCursor(x, (displayHeight - h) / 2);
 #endif // _ADAFRUIT_TFTLCD_H_
+#if defined(_TFT_eSPIH_)
+    h = display->fontHeight();
+    y = (displayHeight - h) / 2;
+    x = display->getCursorX();
+    display->setCursor(x, y);
+#endif // _TFT_eSPIH_
     display->print(captureData.capture[0]);
 
     break;
