@@ -7,6 +7,7 @@ serialDisplay sDisplay(&tft);
 #define COLOR_TACTICAL_DARK_BLUE 0xff
 #define COLOR_TACTICAL_DARK_LIGHTBLUE 0x34dd
 
+
 #define BOTTOM_ZONE 90
 
 void setup()
@@ -20,6 +21,24 @@ void setup()
     tft.fillScreen(0x0);
     drawMainGrid();
     drawLargeObjects();
+    drawTriangles(8,50,100,TFT_WHITE);
+}
+
+void drawTriangles( int sideLength, int xPos, int distanceApart,uint32_t color ) {
+  // Calculate half the base and height of the triangles
+  int halfBase = sideLength / 2;
+  int height = sqrt(sideLength * sideLength - halfBase * halfBase);
+
+  // First triangle pointing up
+  int y1 = 10;
+  tft.fillTriangle(xPos, y1 + height, xPos + halfBase, y1, xPos - halfBase, y1, color);
+
+  // Second triangle pointing down, specified pixels apart on y-axis
+  int y2 = y1 + distanceApart;
+  tft.fillTriangle(xPos, y2 - height, xPos + halfBase, y2, xPos - halfBase, y2, color);
+
+  // Draw a line joining the tips of both triangles
+  tft.drawLine(xPos, y1 + height, xPos, y2 - height, color);
 }
 
 void drawLargeObjects(void)
